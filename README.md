@@ -1,102 +1,73 @@
-Here’s a revised README template for your School Management System project, considering that it's built with React Vite instead of React:
-
-```markdown
 # School Management System
 
-## Overview
+## Project Description
 
-The School Management System is a web application designed to facilitate the management of school operations, including student enrollment, attendance tracking, course management, and more. This application is built using the MERN stack (MongoDB, Express.js, React Vite, Node.js) with Redux for state management, providing a powerful platform for educational institutions.
+The **School Management System** is designed to facilitate the management of student details across various classes, allowing users to perform CRUD (Create, Read, Update, Delete) operations efficiently. The system also tracks library history and fees history for each student, with management capabilities assigned to specific roles within the school.
 
-## Features
+### User Roles
 
-- **User Authentication**: Secure login and registration for students, teachers, and administrators.
-- **Student Management**: Enroll, update, and manage student profiles and records.
-- **Course Management**: Create, update, and delete courses and assign them to students.
-- **Attendance Tracking**: Efficiently record and monitor student attendance.
-- **Real-time Notifications**: Keep users informed with real-time alerts.
-- **Responsive Design**: Fully responsive interface for seamless use on various devices.
+The system features distinct logins for three user roles:
 
-## Tech Stack
+- **School Admin**: 
+  - Has full control over the system.
+  - Can create, edit, and delete accounts for both Office Staff and Librarians.
 
-- **Frontend**:
-  - React Vite
-  - Redux
-  - Tailwind CSS
-- **Backend**:
-  - Node.js
-  - Express.js
-  - MongoDB
-- **Additional Libraries**:
-  - Mongoose (for MongoDB object modeling)
-  - JWT (for authentication)
-  - bcrypt
-  - cors
-  - cookieparser
-  - axios
-## Installation
+- **Office Staff**:
+  - Has access to all student details.
+  - Can manage fees history and view library reviews.
+  - Responsible for performing various administrative tasks.
 
-### Prerequisites
+- **Librarian**:
+  - Has restricted access, limited to viewing library history and student details.
+  - Manages borrowing records for students effectively.
 
-- Node.js (v14 or later)
-- MongoDB (local or remote)
+### Authentication and Access Control
 
-### Getting Started
+The application includes user authentication that allows users to log in based on their assigned roles. This role-based access control (RBAC) determines their access levels and capabilities within the system, ensuring that each user can perform actions relevant to their role while maintaining data integrity and security.
 
-1. **Download the repository**:
+## Prerequisites
 
-   You can download or copy the project files to your local machine.
+Before you begin, ensure you have the following installed on your machine:
 
-2. **Navigate to the project directory**:
+- [Node.js](https://nodejs.org/) (v14 or later)
+- [MongoDB](https://www.mongodb.com/) (local or cloud instance)
+- [npm](https://www.npmjs.com/) (comes with Node.js)
 
-   ```bash
-   cd path/to/school-management-system
-   ```
+## Installation Steps
 
-3. **Install dependencies**:
+### 1. Install Backend Dependencies
 
-   - **For the server**:
-     ```bash
-     cd server
-     npm install
-     ```
+Navigate to the `server` directory and install the necessary dependencies and run the server:
 
-   - **For the client**:
-     ```bash
-     cd client
-     npm install
-     ```
+```bash
+cd server
+npm install
+npm run dev
+```
 
-4. **Configure environment variables**:
+Navigate to the `client` directory and install the necessary dependencies and run the server:
 
-   Create a `.env` file in the `server` directory and add the following variables:
+```bash
+cd ../client
+npm install
+npm run dev
+```
+Running in Development Mode:
+> Backend will run on http://localhost:5000 Frontend will run on http://localhost:5173
 
-   ```plaintext
-MONGO_URL = mongodb+srv://govindnikhil508:6JXzdTVYP0nfW0kq@cluster0.trpwv.mongodb.net/
+## .env file
+> MONGO_URL = mongodb+srv://govindnikhil508:6JXzdTVYP0nfW0kq@cluster0.trpwv.mongodb.net/
 JWT_SECRET = 794fhewnjrunfddbwREWQECEC
 PORT = 5000
-   ```
 
-5. **Start the server**:
+## Libraries used
 
-   ```bash
-   cd server
-   npm start
-   ```
+### Client
+> react: JavaScript library for building user interfaces. react-redux: State management for React using Redux. redux-toolkit: Simplified way to write Redux logic. react-router-dom (v6): Client-side routing for React. axios: HTTP client for making requests to the backend. redux-persist: To persist Redux state across page refreshes.
 
-6. **Start the client**:
 
-   ```bash
-   cd client
-   npm run dev
-   ```
+### Server
+> express: Web framework for Node.js. mongoose: ODM for MongoDB. jsonwebtoken: For generating and verifying JWT tokens. bcryptjs: For password hashing. dotenv: For loading environment variables.
 
-   The application will be running on `http://localhost:5173`.
 
-## Usage
-
-Once the application is running, you can:
-
-- Register as a new user (student or teacher).
-- Log in to access the dashboard.
-- Manage students, courses, and attendance.
 
