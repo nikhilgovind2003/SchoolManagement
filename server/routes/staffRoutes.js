@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createStaffs, deleteStaff, getAllStaffs, getOneStaffById, updateStaffById } from "../controllers/staffControllers.js";
+import { createStaffs, deleteStaff, getAllStaffs, updateStaffById } from "../controllers/staffControllers.js";
 
 const router = Router()
 
@@ -7,7 +7,6 @@ router.get("/", getAllStaffs)
 
 router.post("/", createStaffs)
 
-router.get("/:id", getOneStaffById)
 
 router.put("/:id", updateStaffById)
 

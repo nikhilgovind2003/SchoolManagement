@@ -1,13 +1,12 @@
 import mongoose from "mongoose";
 
-const feeSchema = new mongoose.Schema(
+const feesSchema = new mongoose.Schema(
   {
-    student: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Student", // Reference to the Student model
+    studentId: {
+      type: String,
       required: true,
     },
-    feeType: {
+    feesType: {
       type: String,
       enum: ["tuition", "library", "sports", "lab", "hostel", "miscellaneous"],
       required: true,
@@ -18,7 +17,7 @@ const feeSchema = new mongoose.Schema(
       min: [0, "Amount must be positive"],
     },
     paymentDate: {
-      type: Date,
+      type: String,
       required: true,
     },
     remarks: {
@@ -31,6 +30,6 @@ const feeSchema = new mongoose.Schema(
   }
 );
 
-const feeModel = mongoose.model("Fee", feeSchema);
+const feesModel = mongoose.model("Fees", feesSchema);
 
-export default feeModel;
+export default feesModel;

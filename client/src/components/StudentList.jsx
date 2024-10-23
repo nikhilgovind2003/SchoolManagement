@@ -1,27 +1,57 @@
-// src/components/StudentList.js
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchStudents, deleteStudent } from "../redux/features/student/studentSlice"; // Import actions
+import {
+  fetchStudents,
+  deleteStudent,
+} from "../redux/features/student/studentSlice";
 import { useNavigate } from "react-router-dom";
-import { IoMdAdd } from "react-icons/io";
-import { AiFillEdit, AiFillDelete } from "react-icons/ai"; // Import icons for Edit and Delete
+import { IoMdAdd, IoMdEye } from "react-icons/io";
+import { AiFillEdit, AiFillDelete } from "react-icons/ai";
+import ConfirmationModal from "./ConfirmationModal"; // Import the modal
 
 const StudentList = () => {
+  // Get user role from state
+  const { role } = useSelector((state) => state?.userAuth.userInfo || {});
+  const { students } = useSelector((state) => state.students);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { students } = useSelector((state) => state.students.students); // Fixed state selection
+  // Get students state from Redux
+
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to control the modal
+  const [studentToDelete, setStudentToDelete] = useState(null); // Selected student to delete
+
+  // Fetch students on component mount
   useEffect(() => {
-    dispatch(fetchStudents()); // Fetch students on component mount
+    dispatch(fetchStudents());
   }, [dispatch]);
 
   const handleEdit = (student) => {
-    navigate(`/admin/students/edit/${student.id}`, { state: student });
+    navigate(`/students/edit/${student._id}`, { state: student });
+  };
+  const handleView = (student) => {
+    navigate(`/students/view/${student._id}`, { state: student });
   };
 
-  const handleDelete = (id) => {
-    if (window.confirm("Are you sure you want to delete this student?")) {
-      dispatch(deleteStudent(id));
+  //  DELETE  MODEL
+  const handleOpenDeleteModal = (student) => {
+    setStudentToDelete(student); // Set the selected student object
+    setIsModalOpen(true);
+    // Open the modal
+  };
+
+  const handleConfirmDelete = () => {
+    if (studentToDelete) {
+      // Dispatch the deleteStudent action with the student ID (_id)
+      dispatch(deleteStudent(studentToDelete._id)); // Use the _id directly
     }
+    setIsModalOpen(false); // Close the modal after deletion
+    setStudentToDelete(null); // Clear the selected student
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false); // Close modal without deleting
+    setStudentToDelete(null); // Clear the selected student
   };
 
   const handleAddStudent = () => {
@@ -29,72 +59,117 @@ const StudentList = () => {
   };
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">Student List</h1>
+    <div className="container mx-auto px-44 pt-24">
+      {/* Overview Section */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <div className="bg-blue-500 text-white text-center p-4 rounded-lg shadow-lg">
+          <h2 className="text-lg font-bold">Total Students</h2>
+          <p className="text-2xl">{students?.length || 0}</p>
+        </div>
 
-      {/* Add Student Button */}
-      <div className="flex justify-end mb-4">
-        <button
-          onClick={handleAddStudent}
-          className="flex items-center bg-blue-600 text-white py-2 px-4 rounded-full shadow-lg hover:bg-blue-500 transition duration-200"
-        >
-          <IoMdAdd size={20} className="mr-2" />
-          Add Student
-        </button>
+        <div className="bg-yellow-500 text-white text-center p-4 rounded-lg shadow-lg">
+          <h2 className="text-lg font-bold">Class Levels</h2>
+          <p className="text-2xl">
+            {Array.isArray(students) &&
+              new Set(students?.map((s) => s.class)).size}
+          </p>
+        </div>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Student List</h1>
+        <div className="space-x-2">
+          {(role === "admin" || role === "staff" )? (
+            <button
+              onClick={handleAddStudent}
+              className="flex items-center bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200"
+            >
+              <IoMdAdd size={20} className="mr-2" />
+              Add Student
+            </button>
+          ) : (
+            <></>
+          )}
+        </div>
       </div>
 
       {/* Student Table */}
-      <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
-        <thead>
-          <tr className="bg-blue-500 text-white uppercase text-sm leading-normal">
-            <th className="py-3 px-6">Name</th>
-            <th className="py-3 px-6">Age</th>
-            <th className="py-3 px-6">Email</th>
-            <th className="py-3 px-6">Class</th>
-            <th className="py-3 px-6">Actions</th>
-          </tr>
-        </thead>
-        <tbody className="text-gray-600 text-sm font-light">
-          {/* Convert students object into an array and map over it */}
-          {Array.isArray(students) && students.length > 0 ? (
-            students.map((student) => (
-              <tr
-                key={student.id}
-                className="border-b  border-gray-200 hover:bg-gray-100 transition duration-200"
-              >
-                <td className="py-3 px-6">{student.name}</td>
-                <td className="py-3 px-6">{student.age}</td>
-                <td className="py-3 px-6">{student.email}</td>
-                <td className="py-3 px-6">{student.class}</td>
-                <td className="py-3 px-6 flex space-x-2">
-                  {/* Edit Button with Icon */}
-                  <button
-                    onClick={() => handleEdit(student)}
-                    className="flex items-center bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600 transition duration-200"
-                  >
-                    <AiFillEdit size={16} className="mr-1" />
-                    Edit
-                  </button>
-                  {/* Delete Button with Icon */}
-                  <button
-                    onClick={() => handleDelete(student.id)}
-                    className="flex items-center bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600 transition duration-200"
-                  >
-                    <AiFillDelete size={16} className="mr-1" />
-                    Delete
-                  </button>
+      <div className="overflow-x-auto shadow-lg border border-gray-200 rounded-lg">
+        <table className="min-w-full bg-white">
+          <thead className="bg-gray-100 border-b">
+            <tr>
+              <th className="text-left p-4">Sl.No</th>
+              <th className="text-left p-4">Name</th>
+              <th className="text-left p-4">Age</th>
+              <th className="text-left p-4">Email</th>
+              <th className="text-left p-4">Class</th>
+              {(role === "admin" || role === "staff") ? (
+                <th className="text-left p-4">Actions</th>
+              ) : null}
+            </tr>
+          </thead>
+          <tbody>
+            {Array.isArray(students) && students.length > 0 ? (
+              students.map((student, index) => (
+                <tr
+                  key={student._id}
+                  className="border-b hover:bg-gray-100 transition duration-200"
+                >
+                  <td className="py-2 px-4">{index + 1}</td>
+                  <td className="p-4">
+                    {student.firstName + " " + student.lastName}
+                  </td>
+                  <td className="p-4">{student.age}</td>
+                  <td className="p-4">{student.email}</td>
+                  <td className="p-4">{student.class}</td>
+                  {(role === "admin" || role === "staff") && (
+                    <td className="p-4 flex space-x-2">
+                      {/* Edit Button with Icon */}
+                      <button
+                        onClick={() => handleView(student)}
+                        className="flex items-center bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600 transition duration-200"
+                      >
+                        <IoMdEye size={16} className="mr-1" />
+                        View
+                      </button>
+                      <button
+                        onClick={() => handleEdit(student)}
+                        className="flex items-center bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600 transition duration-200"
+                      >
+                        <AiFillEdit size={16} className="mr-1" />
+                        Edit
+                      </button>
+                      {/* Delete Button with Icon */}
+                      <button
+                        onClick={() => handleOpenDeleteModal(student)}
+                        className="flex items-center bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600 transition duration-200"
+                      >
+                        <AiFillDelete size={16} className="mr-1" />
+                        Delete
+                      </button>
+                    </td>
+                  )}
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5" className="text-center p-4 text-gray-500">
+                  No students found.
                 </td>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="5" className="py-3 px-6 text-center text-gray-500">
-                No students found.
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onConfirm={handleConfirmDelete}
+        message={`Are you sure you want to delete the student "${studentToDelete?.firstName} ${studentToDelete?.lastName}"?`}
+      />
     </div>
   );
 };

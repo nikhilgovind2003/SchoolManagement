@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 const AddNewBookForm = () => {
   const [bookDetails, setBookDetails] = useState({
@@ -52,7 +52,7 @@ const AddNewBookForm = () => {
   };
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-6 mt-24">
       <h1 className="text-2xl font-bold mb-4">Add New Book</h1>
       {error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
@@ -66,7 +66,7 @@ const AddNewBookForm = () => {
           <span className="block sm:inline">{successMessage}</span>
         </div>
       )}
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md">
+      <form onSubmit={handleSubmit} className="bg-gray-30 p-6 rounded-lg shadow-md">
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
             Book Title

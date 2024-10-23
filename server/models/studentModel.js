@@ -2,11 +2,17 @@ import mongoose from "mongoose";
 
 const studentSchema = new mongoose.Schema(
   {
+    studentId: {
+      type: String,
+      unique: true, // Ensure studentId is unique
+    },
     firstName: {
       type: String,
-      required: true,
     },
     lastName: {
+      type: String,
+    },
+    age: {
       type: String,
       required: true,
     },
@@ -17,24 +23,21 @@ const studentSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
     },
     class: {
       type: String,
       required: true,
     },
-    libraryHistory: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "LibraryHistory",
-      },
-    ],
-    feesHistory: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "FeesHistory",
-      },
-    ],
+    issuedBook: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "LibraryHistory",
+      required: false,
+    },
+    feesHistory: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "FeesHistory",
+      required: false,
+    },
   },
   { timestamps: true }
 );

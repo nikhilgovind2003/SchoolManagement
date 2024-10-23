@@ -1,39 +1,49 @@
 import jwt from "jsonwebtoken";
 import { userModel } from "../models/index.js";
+
 export const verifyToken = async (req, res, next) => {
-  const token = req.cookies.token || req.headers['Authorization']?.split(' ')[1]||req.headers['authorization']?.split(' ')[1];
-  console.log("token : ",token);
-  if (!token) {
-    return res.status(401).json({
-      success: false,
-      message: "No token, Authorization denied",
-      isAuthenticated: false,
-    });
-  }
-
+  
   try {
-    // Verify the token using the secret
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await userModel.findById(decodedToken.id);
-    console.log("user", user);
+    const token =
+      req.cookies?.token ||
+      req.headers["authorization"]?.split(" ")[1];
+    console.log("token",token);
+    console.log("Cookies:", req.cookies);
+      
 
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: "No token, authorization denied",
+        isAuthenticated: false,
+      });
+    }
+
+    // Verify the token
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+
+    const user = await userModel.findById(decodedToken.id);
     if (!user) {
       return res.status(401).json({
         success: false,
         message: "User not found",
       });
     }
-    const role = await userModel.findById(user.id).select('role')
 
-    // Attach both decoded user and role to the request
+    // Fetch the role and attach it to the request
+    const { role } = await userModel.findById(user.id).select("role");
+
     req.user = {
       id: decodedToken.id,
-      role: role.role // Make sure the role is attached here
+      role,
     };
 
     next();
-  } catch (err) {
-    console.log("Token Verification Error: ", err.message);
-    res.status(401).json({ msg: "Token is not valid" });
+  } catch (error) {
+    console.error("Token verification failed:", error.message);
+    res.status(401).json({
+      success: false,
+      message: "Invalid or expired token",
+    });
   }
 };

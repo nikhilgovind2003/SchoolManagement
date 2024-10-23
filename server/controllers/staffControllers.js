@@ -1,10 +1,13 @@
+import bcrypt from "bcrypt"; // Import bcrypt
 import { userModel } from "../models/index.js";
+
 export const getAllStaffs = async (req, res) => {
   try {
-    const allStaffs = await userModel.find({ role: { $in: ["staff"] } });
+    const staffs = await userModel.find({
+      role: { $in: ["staff", "librarian"] },
+    });
     res.json({
-      success: true,
-      allStaffs,
+      staffs,
     });
   } catch (error) {
     res.json({ message: error.message });
@@ -14,87 +17,84 @@ export const getAllStaffs = async (req, res) => {
 export const createStaffs = async (req, res) => {
   try {
     const { userName, email, password, role } = req.body;
+    console.log(role);
 
-    await userModel.create({ userName, email, password, role });
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10); // 10 is the salt rounds
+
+    // Create staff with hashed password
+    await userModel.create({ userName, email, password: hashedPassword, role });
 
     const data = {
       userName,
       email,
-      password,
       role,
+      // Do not send the hashed password back to the client
     };
 
     res.json({
       message: "Created successfully",
-      data: data,
+      staff: data,
     });
+
+    console.log(data);
   } catch (error) {
     res.json({ error: error.message });
   }
 };
 
 export const updateStaffById = async (req, res) => {
-    const { id } = req.params;
+  try {
+    const {id} = req.params;
     const data = req.body;
-  
-    const updatedStaffData = await userModel.findOneAndUpdate(
-      { _id: id },
-      {
-        $set: {
-          ...data,
-        },
-      },
-      {
-        new: true,
-      }
-    );
-  
+    console.log("data", data);
+console.log(id);
+
+    // checking book is exists or not
+    const updatedBook = await userModel.findOneAndUpdate({ _id: id }, data, {
+      new: true,
+    });
+
+
     if (!updatedStaffData) {
       return res.status(404).json({
         success: false,
         message: "staff does not exists!",
       });
     }
-  
+
     return res.status(200).json({
       success: true,
       message: "staff updated succesfully!",
       data: updatedStaffData,
     });
-  };
-  
-export const getOneStaffById = async (req, res) => {
-  let { id } = req.params;
-
-  const student = await userModel.findById(id);
-
-  if (!student) {
-    res.status(404).json({
-      success: false,
-      message: "User not found",
+  } catch (error) {
+    res.status(500).json({
+      error: error.message,
     });
   }
-
-  return res.status(200).json({
-    message: "User found",
-    data: student,
-  });
 };
 
 export const deleteStaff = async (req, res) => {
-  const { id } = req.params;
-  const staff = await userModel.deleteOne({ _id: id });
+  try {
+    const { id } = req.params;
+    const staff = await userModel.deleteOne({ _id: id });
 
-  if (!staff) {
-    return res.status(404).json({
-      success: false,
-      message: "staff does not exists!",
+    if (!staff) {
+      return res.status(404).json({
+        success: false,
+        message: "staff does not exists!",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      messages: "staff deleted succesfully",
+      data: staff,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error.message,
     });
   }
-
-  return res.status(200).json({
-    success: true,
-    messages: "staff deleted succesfully",
-    data: staff,
-  });
 };

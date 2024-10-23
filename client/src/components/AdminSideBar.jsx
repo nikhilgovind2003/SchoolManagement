@@ -1,22 +1,35 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { getMenu } from '../utils/Menu';
+import { useSelector } from 'react-redux';
 
 const AdminSideBar = () => {
+const navigate = useNavigate()
+  const [menu, setMenu] = useState([]);
+  const { userInfo, isAuthenticated } = useSelector((state) => state.userAuth);
+
+  useEffect(() => {
+    if (userInfo && isAuthenticated) setMenu(getMenu(userInfo.role));
+    else setMenu([]);
+  }, [userInfo, isAuthenticated]);
+
   return (
-    <aside className="w-64 bg-gray-800 text-white h-full">
-      <div className="p-6">
-        <h2 className="text-2xl font-bold mb-6">Admin Dashboard</h2>
-        <ul className="space-y-4">
-          <li><Link to="/" className="text-left block py-2 px-4 rounded hover:bg-gray-700">Dashboard</Link></li>
-          <li><Link to="/fees-history" className="text-left block py-2 px-4 rounded hover:bg-gray-700">Fees History</Link></li>
-          <li><Link to="/library-history" className="text-left block py-2 px-4 rounded hover:bg-gray-700">Library History</Link></li>
-          <li><Link to="/recent-chats" className="text-left block py-2 px-4 rounded hover:bg-gray-700">Chats</Link></li>
-          <li><Link to="/add-student" className="text-left block py-2 px-4 rounded hover:bg-gray-700">Add Student</Link></li>
-          <li><Link to="/add-staff" className="text-left block py-2 px-4 rounded hover:bg-gray-700">Add Staff</Link></li>
-          <li><Link to="/add-librarian" className="text-left block py-2 px-4 rounded hover:bg-gray-700">Add Librarian</Link></li>
+    <div className="w-40 pt-24 bg-gray-700 text-white h-full fixed">
+      <div className="font-bold">
+        <ul className="">
+             {menu.map((item, index) => (
+             <li
+             key={index}
+             onClick={() => navigate(item.path)} // Correct use of navigate
+             className="hover:bg-red-500 p-4 cursor-pointer border-b-2 border-b-gray-600" // Added cursor pointer for better UX
+           >        {/* Make sure to use <li> for each item */}
+                <p to={item.path}>{item.displayName}</p>
+              </li>
+            ))}
         </ul>
       </div>
-    </aside>
+    </div>
   );
 };
 

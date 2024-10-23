@@ -1,68 +1,146 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Async thunks for fetching, adding, editing, and deleting students
-export const fetchStudents = createAsyncThunk(
-  "students/fetchStudents",
-  async () => {
-    const response = await axios.get(`http://localhost:5000/api/students`, { withCredentials: true }); // Ensure the URL is correct
-    return response.data; // Adjust based on your API response structure
-  }
-);
+// Define API endpoints
+const API_URL = "http://localhost:5000/api/students";
 
-export const addStudent = createAsyncThunk("students/addStudent", async (student) => {
-  const response = await axios.post(
-    "http://localhost:5000/api/students",
-    student
-  );
-  return response.data;
+// Async Thunks for handling API calls
+
+// Fetch all students
+export const fetchStudents = createAsyncThunk("students/fetchAll", async () => {
+  try {
+    const response = await axios.get(`http://localhost:5000/api/students`, {
+      withCredentials: true,
+    });
+    return response.data.students;
+  } catch (error) {
+    return error.response.data;
+  }
 });
 
-export const editStudent = createAsyncThunk(
-  "students/editStudent",
-  async (student) => {
-    const response = await axios.put(
-      `http://localhost:5000/api/students/${student.id}`,
-      student,
-      { withCredentials: true }
-    );
-    return response.data;
+// Add a new student
+export const addStudent = createAsyncThunk(
+  "students/add",
+  async (studentData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:5000/api/students`,
+        studentData,
+        { withCredentials: true }
+      );
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
   }
 );
 
+// Update student by ID
+export const updateStudent = createAsyncThunk(
+  "students/update",
+  async ({ id, studentData }, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/api/students/${id}`,
+        studentData,
+        { withCredentials: true }
+      );
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+// Delete student by ID
 export const deleteStudent = createAsyncThunk(
-  "students/deleteStudent",
-  async (id) => {
-    await axios.delete(`http://localhost:5000/api/students/${id}`);
-    return id;
+  "students/delete",
+  async (id, { rejectWithValue }) => {
+    try {
+      const res = await axios.delete(
+        `http://localhost:5000/api/students/${id}`,
+        { withCredentials: true }
+      );
+      console.log(res.data);
+
+      return id; // Return the ID of the deleted student
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
   }
 );
 
-const initialState = {
-  students: [],
-  status: "idle",
-  error: null,
-};
-
+// Create the student slice
 const studentSlice = createSlice({
   name: "students",
-  initialState,
+  initialState: {
+    students: [],
+    status: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed'
+    error: null,
+  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
+      // Fetch all students
+      .addCase(fetchStudents.pending, (state) => {
+        state.status = "loading";
+      })
       .addCase(fetchStudents.fulfilled, (state, action) => {
+        state.status = "succeeded";
         state.students = action.payload;
       })
-      .addCase(addStudent.fulfilled, (state, action) => {
-        state.students.push(action.payload);
+      .addCase(fetchStudents.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
       })
-      .addCase(editStudent.fulfilled, (state, action) => {
-        const index = state.students.findIndex((s) => s._id === action.payload._id); // Use _id instead of id
-        state.students[index] = action.payload;
+
+      // Add a new student
+      .addCase(addStudent.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(addStudent.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.students.push(action.payload); // Add the new student to the state
+      })
+      .addCase(addStudent.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+
+      // Update student
+      .addCase(updateStudent.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(updateStudent.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        const index = state.students.findIndex(
+          (student) => student._id === action.payload._id
+        );
+        if (index !== -1) {
+          state.students[index] = action.payload; // Update the student in the state
+        }
+      })
+      .addCase(updateStudent.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+
+      // Delete student
+      .addCase(deleteStudent.pending, (state) => {
+        state.status = "loading";
       })
       .addCase(deleteStudent.fulfilled, (state, action) => {
-        state.students = state.students.filter((s) => s._id !== action.payload); // Use _id instead of id
+        state.status = "succeeded";
+        state.students = state.students.filter(
+          (student) => student._id !== action.payload
+        ); // Remove the deleted student from the state
+      })
+      .addCase(deleteStudent.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
       });
   },
 });
 
+// Export the reducer to be added to the store
 export default studentSlice.reducer;
