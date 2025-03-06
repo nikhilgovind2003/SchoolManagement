@@ -6,7 +6,7 @@ export const fetchLibraryRecords = createAsyncThunk(
   "library/fetchLibraryRecords",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/library`, {
+      const response = await axios.get(`https://schoolmanagement-backend-le5k.onrender.com/api/library`, {
         withCredentials: true,
       });
       return response.data;
@@ -22,7 +22,7 @@ export const addLibraryRecord = createAsyncThunk(
     
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/library",
+        "https://schoolmanagement-backend-le5k.onrender.com/api/library",
         record,
         { withCredentials: true }
       );
@@ -38,7 +38,7 @@ export const editLibraryRecord = createAsyncThunk(
   async ({ id, updatedData }, { rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/library/${id}`, // Correct endpoint
+        `https://schoolmanagement-backend-le5k.onrender.com/api/library/${id}`, // Correct endpoint
         updatedData, // Send only the updated data
         { withCredentials: true }
       );
@@ -58,7 +58,7 @@ export const deleteLibraryRecord = createAsyncThunk(
   "library/deleteLibraryRecord",
   async (id, { rejectWithValue }) => {
     try {
-      await axios.delete(`http://localhost:5000/api/library/${id}`, {
+      await axios.delete(`https://schoolmanagement-backend-le5k.onrender.com/api/library/${id}`, {
         withCredentials: true,
       });
       return id; // Return the ID to be used for removing the record from the state

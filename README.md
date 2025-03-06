@@ -53,7 +53,7 @@ npm install
 npm run dev
 ```
 Running in Development Mode:
-> Backend will run on http://localhost:5000 Frontend will run on http://localhost:5173
+> Backend will run on https://schoolmanagement-backend-le5k.onrender.com Frontend will run on http://localhost:5173
 
 ## .env file
 > MONGO_URL = mongodb+srv://govindnikhil508:6JXzdTVYP0nfW0kq@cluster0.trpwv.mongodb.net/

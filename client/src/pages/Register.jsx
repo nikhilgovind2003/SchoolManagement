@@ -22,7 +22,7 @@ const Register = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/register",
+        "https://schoolmanagement-backend-le5k.onrender.com/api/auth/register",
         { userName, email, password }
       );
       console.log(newUser);
