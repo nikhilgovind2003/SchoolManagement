@@ -56,7 +56,7 @@ Running in Development Mode:
 > Backend will run on https://schoolmanagement-backend-le5k.onrender.com Frontend will run on http://localhost:5173
 
 ## .env file
-> MONGO_URL = mongodb+srv://govindnikhil508:6JXzdTVYP0nfW0kq@cluster0.trpwv.mongodb.net/
+> MONGO_URL =mongodb+srv://govindnikhil508:vH6XlHOggMMTwtcZ@cluster0.trpwv.mongodb.net/
 JWT_SECRET = 794fhewnjrunfddbwREWQECEC
 PORT = 5000
 
