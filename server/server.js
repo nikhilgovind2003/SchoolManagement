@@ -41,7 +41,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: 'https://school-management-nine-iota.vercel.app/',
+    origin: ["http://localhost:5173/",'https://school-management-nine-iota.vercel.app/'],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
   })
