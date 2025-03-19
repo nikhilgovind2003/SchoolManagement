@@ -3,14 +3,14 @@ import axios from "axios";
 
 // Async thunks for fetching, adding, editing, and deleting staff
 export const fetchStaff = createAsyncThunk("staff/fetchStaff", async () => {
-  const response = await axios.get(`https://schoolmanagement-backend-le5k.onrender.com/api/staff`, {
+  const response = await axios.get(`https://school-management-nine-iota.vercel.app/api/staff`, {
     withCredentials: true,
   });
   return response.data; // Expecting an array of staff objects
 });
 
 export const addStaff = createAsyncThunk("staff/addStaff", async (staff) => {
-  const response = await axios.post("https://schoolmanagement-backend-le5k.onrender.com/api/staff", staff, {
+  const response = await axios.post("https://school-management-nine-iota.vercel.app/api/staff", staff, {
     withCredentials: true,
   });
   return response.data; // Expecting the newly created staff object
@@ -22,7 +22,7 @@ export const editStaff = createAsyncThunk(
     
     try {
       const response = await axios.put(
-        `https://schoolmanagement-backend-le5k.onrender.com/api/staff/${id}`, // Use _id for update
+        `https://school-management-nine-iota.vercel.app/api/staff/${id}`, // Use _id for update
         updatedData,
         { withCredentials: true }
       );
@@ -36,7 +36,7 @@ export const editStaff = createAsyncThunk(
 export const deleteStaff = createAsyncThunk(
   "staff/deleteStaff",
   async (_id) => {
-    await axios.delete(`https://schoolmanagement-backend-le5k.onrender.com/api/staff/${_id}`, {
+    await axios.delete(`https://school-management-nine-iota.vercel.app/api/staff/${_id}`, {
       withCredentials: true,
     });
     return _id; // Return the _id of the deleted staff member

@@ -2,14 +2,14 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 // Define API endpoints
-const API_URL = "https://schoolmanagement-backend-le5k.onrender.com/api/students";
+const API_URL = "https://school-management-nine-iota.vercel.app/api/students";
 
 // Async Thunks for handling API calls
 
 // Fetch all students
 export const fetchStudents = createAsyncThunk("students/fetchAll", async () => {
   try {
-    const response = await axios.get(`https://schoolmanagement-backend-le5k.onrender.com/api/students`, {
+    const response = await axios.get(`https://school-management-nine-iota.vercel.app/api/students`, {
       withCredentials: true,
     });
     return response.data.students;
@@ -24,7 +24,7 @@ export const addStudent = createAsyncThunk(
   async (studentData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `https://schoolmanagement-backend-le5k.onrender.com/api/students`,
+        `https://school-management-nine-iota.vercel.app/api/students`,
         studentData,
         { withCredentials: true }
       );
@@ -41,7 +41,7 @@ export const updateStudent = createAsyncThunk(
   async ({ id, studentData }, { rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `https://schoolmanagement-backend-le5k.onrender.com/api/students/${id}`,
+        `https://school-management-nine-iota.vercel.app/api/students/${id}`,
         studentData,
         { withCredentials: true }
       );
@@ -58,7 +58,7 @@ export const deleteStudent = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const res = await axios.delete(
-        `https://schoolmanagement-backend-le5k.onrender.com/api/students/${id}`,
+        `https://school-management-nine-iota.vercel.app/api/students/${id}`,
         { withCredentials: true }
       );
       console.log(res.data);

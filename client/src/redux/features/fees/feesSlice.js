@@ -7,7 +7,7 @@ export const fetchFeesRecords = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        "https://schoolmanagement-backend-le5k.onrender.com/api/fees",
+        "https://school-management-nine-iota.vercel.app/api/fees",
         { withCredentials: true }
       );
       return response.data;
@@ -24,7 +24,7 @@ export const addFeesRecord = createAsyncThunk(
   console.log("newRecord", newRecord);
     try {
       const response = await axios.post(
-        "https://schoolmanagement-backend-le5k.onrender.com/api/fees",
+        "htthttps://school-management-nine-iota.vercel.app/api/fees",
         newRecord,
         { withCredentials: true }
       );
@@ -43,7 +43,7 @@ export const editFeesRecord = createAsyncThunk(
     
     try {
       const response = await axios.put(
-        `https://schoolmanagement-backend-le5k.onrender.com/api/fees/${id}`,
+        `https://school-management-nine-iota.vercel.app/api/fees/${id}`,
         updatedData,
         { withCredentials: true }
       );
@@ -60,7 +60,7 @@ export const deleteFeesRecord = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       await axios.delete(
-        `https://schoolmanagement-backend-le5k.onrender.com/api/fees/${id}`,
+        `https://school-management-nine-iota.vercel.app/api/fees/${id}`,
         { withCredentials: true }
       );
       return id; // Return the ID to filter it out in the state

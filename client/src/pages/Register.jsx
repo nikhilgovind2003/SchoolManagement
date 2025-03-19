@@ -22,7 +22,7 @@ const Register = () => {
 
     try {
       const response = await axios.post(
-        "https://schoolmanagement-backend-le5k.onrender.com/api/auth/register",
+        "https://school-management-nine-iota.vercel.app/api/auth/register",
         { userName, email, password }
       );
       console.log(newUser);

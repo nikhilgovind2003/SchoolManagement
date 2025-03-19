@@ -51,7 +51,7 @@ const LoginPage = () => {
             setLoading(true);
             try {
                 const res = await axios.post(
-                    'https://schoolmanagement-backend-le5k.onrender.com/api/auth/login',
+                    'https://school-management-nine-iota.vercel.app/api/auth/login',
                     formData,
                     { withCredentials: true }
                 );
