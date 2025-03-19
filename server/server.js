@@ -60,6 +60,14 @@ app.use(
   feesRoutes
 );
 
+
+
+app.get("/", (req, res) => {
+  res.send({
+    activeStatus: true,
+    error: false
+  })
+})
 app.listen(process.env.PORT || 5000, () => {
   console.log("Server run at port 4000!");
 });
