@@ -1,5 +1,6 @@
 import express from "express";
 import { addNewFees, deleteFeesById, getAllFees, updateFeesById } from "../controllers/feesContoller.js";
+import { addFeesValidator } from "../validators/feesValidator.js";
 
 const router = express.Router();
 
@@ -8,7 +9,11 @@ const router = express.Router();
 router.get("/", getAllFees);
 
 // Add new book
-router.post("/", addNewFees);
+router.post(
+  "/",
+  addFeesValidator,
+  addNewFees
+);
 
 // delete a book'
 router.delete("/:id", deleteFeesById);

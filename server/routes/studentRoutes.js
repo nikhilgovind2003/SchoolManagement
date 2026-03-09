@@ -1,6 +1,7 @@
 import express from "express";
 import { addStudent, deleteStudent, getAllStudents, getOneStudentById, updateStudentById } from "../controllers/studentController.js";
 import { authorizedRoles } from "../middlewares/roleMiddleware.js";
+import { addStudentValidator } from "../validators/studentValidator.js";
 
 const router = express.Router();
 
@@ -11,7 +12,12 @@ router.get("/",authorizedRoles("admin", "staff", "librarian"), getAllStudents);
 router.get("/:id",authorizedRoles("admin", "staff"), getOneStudentById);
 
 // Create new student
-router.post("/",authorizedRoles("admin", "staff"), addStudent);
+router.post(
+  "/",
+  authorizedRoles("admin", "staff"),
+  addStudentValidator,
+  addStudent
+);
 
 // Update the student
 router.put("/:id",authorizedRoles("admin", "staff"), updateStudentById);

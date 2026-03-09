@@ -8,13 +8,19 @@ import {
   updateBookById,
 } from "../controllers/libraryController.js";
 import { authorizedRoles } from "../middlewares/roleMiddleware.js";
+import { addLibraryRecordValidator } from "../validators/libraryValidator.js";
 
 const router = express.Router();
 // // Get all books details
 router.get("/", authorizedRoles("admin", "staff", "librarian"),getAllBooks);
 
 // Add new book
-router.post("/",authorizedRoles("admin", "staff","librarian"), addNewBook);
+router.post(
+  "/",
+  authorizedRoles("admin", "staff", "librarian"),
+  addLibraryRecordValidator,
+  addNewBook
+);
 
 // delete a book'
 router.delete("/:id",authorizedRoles("admin","staff", "librarian"), deleteBookById);

@@ -60,6 +60,6 @@ app.use(
   feesRoutes
 );
 
-app.listen(process.env.PORT || 5000, () => {
+app.listen(4000, () => {
   console.log("Server run at port 4000!");
 });
