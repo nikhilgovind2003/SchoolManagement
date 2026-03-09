@@ -5,6 +5,7 @@ import {
   fetchLibraryRecords,
 } from "../redux/features/library/LibrarySlice";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const AddLibrary = () => {
   const navigate = useNavigate(); // For navigation after updating the record
@@ -54,6 +55,7 @@ const AddLibrary = () => {
       dispatch(addLibraryRecord(newLibrary)); // Dispatch action
       setNewLibrary({ bookName: "", borrowDate: "", returnDate: "", status: "borrowed" }); // Reset form
       navigate("/library-list"); // Navigate on success
+      toast.success("Library record added successfully!"); // Show success message
     }
   };
 

@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { IoMdAdd, IoMdEye } from "react-icons/io";
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import ConfirmationModal from "./ConfirmationModal"; // Import the modal
+import { toast } from "sonner";
 
 const StudentList = () => {
   // Get user role from state
@@ -44,6 +45,7 @@ const StudentList = () => {
     if (studentToDelete) {
       // Dispatch the deleteStudent action with the student ID (_id)
       dispatch(deleteStudent(studentToDelete._id)); // Use the _id directly
+      toast.success("Student deleted successfully!"); // Show success message
     }
     setIsModalOpen(false); // Close the modal after deletion
     setStudentToDelete(null); // Clear the selected student

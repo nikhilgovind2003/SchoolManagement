@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchStudents, addStudent } from "../redux/features/student/studentSlice"; 
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const StudentForm = () => {
   const navigate = useNavigate();
@@ -46,6 +47,7 @@ const StudentForm = () => {
       dispatch(addStudent(newStudent));
       setNewStudent({ firstName: "", lastName: "", age: "", email: "", class: "" });
       navigate("/student-list");
+      toast .success("Student added successfully!"); // Show success message
     }
   };
 

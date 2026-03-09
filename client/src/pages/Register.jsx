@@ -22,7 +22,7 @@ const Register = () => {
 
     try {
       const response = await axios.post(
-        "https://schoolmanagement-backend-le5k.onrender.com/api/auth/register",
+        `${import.meta.env.VITE_API_URL}/api/auth/register`,
         { userName, email, password }
       );
       console.log(newUser);
@@ -50,7 +50,7 @@ const Register = () => {
         throw new Error("Unknown role");
       }
     } catch (error) {
-      setError("account not not created");
+      setError(error.response?.data?.message || "Registration failed");
       console.log(error);
     } finally {
       setLoading(false);

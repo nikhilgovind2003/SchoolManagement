@@ -75,7 +75,7 @@ const AdminDashboard = () => {
               Total Students
             </h2>
             <p className="text-2xl text-blue-600 font-bold">
-              {students.length}
+              {students.length || 0}
             </p>
           </div>
           <div className="bg-blue-600 text-white text-center py-2">

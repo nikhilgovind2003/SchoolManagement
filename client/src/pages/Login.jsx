@@ -51,7 +51,7 @@ const LoginPage = () => {
             setLoading(true);
             try {
                 const res = await axios.post(
-                    'https://schoolmanagement-backend-le5k.onrender.com/api/auth/login',
+                    `${import.meta.env.VITE_API_URL}/api/auth/login`,
                     formData,
                     { withCredentials: true }
                 );
@@ -130,6 +130,10 @@ const LoginPage = () => {
                             {loading ? 'Logging in...' : 'Log In'}
                         </button>
                     </form>
+
+
+                    {/* navigation to register */}
+                    <p className="mt-4 text-center text-gray-600">Don't have an account? <span className="text-blue-600 hover:underline cursor-pointer" onClick={() => navigate('/signup')}>Register here</span></p>  
                 </div>
             </div>
 

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateStudent, fetchStudents } from "../redux/features/student/studentSlice";
 import { useParams, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const StudentEdit = () => {
   const { id } = useParams();
@@ -42,9 +43,11 @@ const StudentEdit = () => {
     dispatch(updateStudent({ id, studentData: formData }))
       .unwrap()
       .then(() => {
+        toast.success("Student updated successfully!"); // Show success message
         navigate("/student-list");
       })
       .catch((error) => {
+        toast.error("Failed to update student. Please try again.");
         console.error("Failed to update student:", error);
       });
   };

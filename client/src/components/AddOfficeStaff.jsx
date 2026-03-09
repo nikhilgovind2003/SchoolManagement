@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addStaff } from "../redux/features/staff/staffSlice";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const AddOfficeStaff = () => {
   const dispatch = useDispatch();
@@ -87,10 +88,16 @@ const AddOfficeStaff = () => {
     // Dispatch action to add staff and reset form on success
     try {
       await dispatch(addStaff(newStaff));
+      
+      
+      toast.success("Staff member added successfully!"); // Show success message
       setNewStaff({ userName: "", email: "", password: "", role: "" }); // Reset form
       navigate("/staff-list"); // Navigate to the staff list page
+
+
     } catch (error) {
-      console.error("Failed to add staff:", error); // Handle any dispatch errors
+      console.error("Failed to add staff:", error);
+      toast.error(error?.message || "Failed to add staff member. Please try again.");
     }
   };
 
