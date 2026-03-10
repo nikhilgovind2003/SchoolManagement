@@ -2,8 +2,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchStudents } from "../../redux/features/student/studentSlice";
 import { fetchFeesRecords } from "../../redux/features/fees/feesSlice";
-import StudentList from './../StudentList';
-import Student from './../../../../server/models/studentModel';
 
 const StaffDashboard = () => {
   const user = useSelector((state) => state?.userAuth?.userInfo || {});
