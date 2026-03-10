@@ -39,11 +39,21 @@ mongoose
 // middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://school-management-admin-indol.vercel.app"
+];
+
 app.use(
   cors({
-    origin: ["http://localhost:5173",'https://school-management-admin-indol.vercel.app/'],
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-    credentials: true,
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true
   })
 );
 app.use(cookieParser());
